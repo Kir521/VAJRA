@@ -1,0 +1,4220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>VAJRA | Security Intelligence</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                V
+            </div>
+
+            <div class="brand-text">
+
+                <h1>VAJRA</h1>
+
+                <span>
+                    Security Intelligence
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="navigation">
+
+            <button
+                class="nav-item active"
+                onclick="showSection('dashboard', this)"
+            >
+                <span>⌂</span>
+                Dashboard
+            </button>
+
+
+            <button
+                class="nav-item"
+                onclick="showSection('url', this)"
+            >
+                <span>↗</span>
+                URL Guardian
+            </button>
+
+
+            <button
+                class="nav-item"
+                onclick="showSection('file', this)"
+            >
+                <span>□</span>
+                File Guardian
+            </button>
+
+
+            <button
+                class="nav-item"
+                onclick="showSection('privacy', this)"
+            >
+                <span>◈</span>
+                Privacy Guardian
+            </button>
+
+
+            <button
+                class="nav-item"
+                onclick="showSection('ai', this)"
+            >
+                <span>✦</span>
+                AI Intelligence
+            </button>
+
+
+            <button
+                class="nav-item"
+                onclick="showSection('incidents', this); loadIncidentCenter()"
+            >
+                <span>!</span>
+                Incident Center
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="showSection('activity', this)"
+            >
+                <span>◉</span>
+                Activity Center
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="protection-status">
+
+                <div class="status-indicator"></div>
+
+                <div>
+
+                    <strong>
+                        Protection Active
+                    </strong>
+
+                    <small>
+                        VAJRA engine online
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <div class="breadcrumb">
+                    VAJRA / SECURITY CENTER
+                </div>
+
+                <h2 id="page-title">
+                    Security Dashboard
+                </h2>
+
+                <p id="page-subtitle">
+                    Unified security intelligence for your system
+                </p>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <div class="system-pill">
+
+                    <span class="status-indicator"></span>
+
+                    <span>
+                        SYSTEM PROTECTED
+                    </span>
+
+                </div>
+
+                <div
+                    class="time-display"
+                    id="current-time"
+                >
+                    --:--
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =========================
+             DASHBOARD
+        ========================== -->
+
+        
+<!-- SECURITY ANALYTICS -->
+<section id="security-analytics" class="section">
+    <div class="section-header">
+        <div>
+            <h2>Security Analytics</h2>
+            <p>Live risk intelligence from VAJRA security scans.</p>
+        </div>
+        <button class="btn-secondary" onclick="loadSecurityAnalytics()">↻ Refresh</button>
+    </div>
+
+    <div class="analytics-grid">
+        <div class="analytics-card">
+            <div class="analytics-label">Total Scans</div>
+            <div class="analytics-value" id="analytics-total">0</div>
+            <div class="analytics-subtitle">Security scans recorded</div>
+        </div>
+
+        <div class="analytics-card">
+            <div class="analytics-label">Average Risk</div>
+            <div class="analytics-value" id="analytics-average">0</div>
+            <div class="analytics-subtitle">Average risk score</div>
+        </div>
+
+        <div class="analytics-card">
+            <div class="analytics-label">Highest Risk</div>
+            <div class="analytics-value" id="analytics-highest">0</div>
+            <div class="analytics-subtitle">Highest recorded score</div>
+        </div>
+
+        <div class="analytics-card">
+            <div class="analytics-label">Critical Events</div>
+            <div class="analytics-value" id="analytics-critical">0</div>
+            <div class="analytics-subtitle">Critical risk scans</div>
+        </div>
+    </div>
+
+    <div class="panel" style="margin-top:20px;">
+        <div class="panel-header">
+            <div>
+                <h3>Risk Distribution</h3>
+                <p>Distribution of recorded security events.</p>
+            </div>
+        </div>
+
+        <div class="risk-distribution">
+            <div class="risk-row">
+                <span class="risk-name">Low</span>
+                <div class="risk-bar">
+                    <div class="risk-bar-fill" data-risk="risk-low"></div>
+                </div>
+                <span class="risk-count" id="risk-low">0</span>
+            </div>
+
+            <div class="risk-row">
+                <span class="risk-name">Medium</span>
+                <div class="risk-bar">
+                    <div class="risk-bar-fill" data-risk="risk-medium"></div>
+                </div>
+                <span class="risk-count" id="risk-medium">0</span>
+            </div>
+
+            <div class="risk-row">
+                <span class="risk-name">High</span>
+                <div class="risk-bar">
+                    <div class="risk-bar-fill" data-risk="risk-high"></div>
+                </div>
+                <span class="risk-count" id="risk-high">0</span>
+            </div>
+
+            <div class="risk-row">
+                <span class="risk-name">Critical</span>
+                <div class="risk-bar">
+                    <div class="risk-bar-fill" data-risk="risk-critical"></div>
+                </div>
+                <span class="risk-count" id="risk-critical">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" style="margin-top:20px;">
+        <div class="panel-header">
+            <div>
+                <h3>Risk Timeline</h3>
+                <p>Recent security activity and risk progression.</p>
+            </div>
+        </div>
+
+        <div id="risk-timeline" class="risk-timeline">
+            <div class="analytics-empty">
+                No security scan data available yet.
+            </div>
+        </div>
+    </div>
+</section>
+
+<section
+            id="dashboard"
+            class="section active"
+        >
+
+
+            <!-- HERO -->
+
+            <div class="hero">
+
+                <div class="hero-content">
+
+                    <div class="hero-label">
+
+                        <span></span>
+
+                        VAJRA SECURITY INTELLIGENCE
+
+                    </div>
+
+
+                    <h1>
+
+                        Your system.
+
+                        <br>
+
+                        <span>
+                            Protected by intelligence.
+                        </span>
+
+                    </h1>
+
+
+                    <p>
+                        Analyze suspicious activity, understand
+                        security risks and make smarter protection
+                        decisions from one unified command center.
+                    </p>
+
+
+                    <div class="hero-actions">
+
+                        <button
+                            class="primary-button"
+                            onclick="openURLScanner()"
+                        >
+
+                            <span>⌕</span>
+
+                            Start Security Scan
+
+                        </button>
+
+
+                        <button
+                            class="secondary-button"
+                            onclick="showSection('ai', this)"
+                        >
+
+                            <span>✦</span>
+
+                            AI Intelligence
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SECURITY CORE -->
+
+                <div class="security-core">
+
+                    <div class="core-glow"></div>
+
+                    <div class="core-ring ring-a"></div>
+                    <div class="core-ring ring-b"></div>
+                    <div class="core-ring ring-c"></div>
+
+
+                    <div class="core-center">
+
+                        <div class="core-logo">
+                            V
+                        </div>
+
+                        <strong>
+                            SECURE
+                        </strong>
+
+                        <small>
+                            VAJRA CORE
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- OVERVIEW -->
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span>
+                        SECURITY OVERVIEW
+                    </span>
+
+                    <h3>
+                        Protection at a glance
+                    </h3>
+
+                </div>
+
+                <div class="live-tag">
+
+                    <span></span>
+
+                    LIVE
+
+                </div>
+
+            </div>
+
+
+            <div class="overview-grid">
+
+
+                <!-- SCORE -->
+
+                <div class="dashboard-card score-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-label">
+                                SECURITY SCORE
+                            </span>
+
+                            <h4>
+                                Overall protection
+                            </h4>
+
+                        </div>
+
+                        <div class="card-icon">
+                            ◉
+                        </div>
+
+                    </div>
+
+
+                    <div class="score-area">
+
+                        <div class="score-circle">
+
+                            <div>
+
+                                <strong id="security-score">
+                                    100
+                                </strong>
+
+                                <span>
+                                    /100
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="score-info">
+
+                            <strong id="score-status">
+                                Protected
+                            </strong>
+
+                            <p id="score-message">
+                                No security analysis performed yet.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- THREATS -->
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-label">
+                                THREATS DETECTED
+                            </span>
+
+                            <h4>
+                                Security events
+                            </h4>
+
+                        </div>
+
+                        <div class="card-icon danger-icon">
+                            !
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-number">
+
+                        <strong id="threat-count">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="stat-footer">
+
+                        <span
+                            class="success-text"
+                            id="threat-status"
+                        >
+                            ● No active threats
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- AI -->
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-label">
+                                AI INTELLIGENCE
+                            </span>
+
+                            <h4>
+                                Active backend
+                            </h4>
+
+                        </div>
+
+                        <div class="card-icon ai-icon">
+                            ✦
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="stat-text"
+                        id="dashboard-backend"
+                    >
+                        Development
+                    </div>
+
+
+                    <div
+                        class="stat-footer"
+                        id="dashboard-ai-status"
+                    >
+                        Checking AI engine...
+                    </div>
+
+                </div>
+
+
+
+                <!-- SECURITY SCANS -->
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-label">
+                                SECURITY SCANS
+                            </span>
+
+                            <h4>
+                                Total analyses
+                            </h4>
+
+                        </div>
+
+                        <div class="card-icon">
+                            ◉
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-number">
+
+                        <strong id="scan-count">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="stat-footer">
+
+                        <span
+                            class="success-text"
+                            id="scan-status"
+                        >
+                            ● No scans yet
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- MAIN GRID -->
+
+            <div class="dashboard-grid">
+
+
+                <!-- QUICK SCAN -->
+
+                <div class="dashboard-card scanner-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-label">
+                                THREAT INTELLIGENCE
+                            </span>
+
+                            <h3>
+                                Quick URL Analysis
+                            </h3>
+
+                            <p>
+                                Check a suspicious link before
+                                interacting with it.
+                            </p>
+
+                        </div>
+
+                        <div class="large-card-icon">
+                            ↗
+                        </div>
+
+                    </div>
+
+
+                    <div class="scanner-input">
+
+                        <input
+                            id="dashboard-url"
+                            type="url"
+                            placeholder="https://example.com/login"
+                            autocomplete="off"
+                        >
+
+
+                        <button
+                            onclick="analyzeDashboardURL()"
+                        >
+                            Analyze
+                        </button>
+
+                    </div>
+
+
+                    <div class="scanner-tags">
+
+                        <span>
+                            PHISHING
+                        </span>
+
+                        <span>
+                            DOMAIN
+                        </span>
+
+                        <span>
+                            REDIRECT
+                        </span>
+
+                        <span>
+                            CREDENTIALS
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ACTIVITY -->
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-label">
+                                SECURITY ACTIVITY
+                            </span>
+
+                            <h3>
+                                Recent Events
+                            </h3>
+
+                        </div>
+
+                        <button
+                            class="text-button"
+                            onclick="showSection('activity')"
+                        >
+                            View all →
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="activity-list"
+                        id="dashboard-activity"
+                    >
+
+                        <div class="empty-activity">
+
+                            <div>
+                                ✓
+                            </div>
+
+                            <span>
+                                VAJRA engine initialized
+                            </span>
+
+                            <small>
+                                Now
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- SECURITY ANALYTICS -->
+
+            <div class="analytics-section dashboard-card">
+
+                <div class="card-header">
+                    <div>
+                        <span class="card-label">SECURITY ANALYTICS</span>
+                        <h3>Risk intelligence overview</h3>
+                        <p>Live statistics generated from VAJRA scan history.</p>
+                    </div>
+                    <button class="text-button" onclick="loadSecurityAnalytics()">Refresh ↻</button>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <span>Total Scans</span>
+                        <strong id="analytics-total">0</strong>
+                        <small>Recorded security analyses</small>
+                    </div>
+                    <div class="analytics-card">
+                        <span>Average Risk</span>
+                        <strong id="analytics-average">0</strong>
+                        <small>Across recorded scans</small>
+                    </div>
+                    <div class="analytics-card">
+                        <span>Highest Risk</span>
+                        <strong id="analytics-highest">0</strong>
+                        <small>Maximum detected score</small>
+                    </div>
+                    <div class="analytics-card">
+                        <span>Critical</span>
+                        <strong id="analytics-critical">0</strong>
+                        <small>Critical risk events</small>
+                    </div>
+                </div>
+
+                <div class="risk-distribution">
+                    <div class="risk-bar-label">
+                        <span>Risk Distribution</span>
+                        <span id="analytics-distribution-total">0 scans</span>
+                    </div>
+                    <div class="risk-bar">
+                        <div id="risk-low-bar" class="risk-bar-low"></div>
+                        <div id="risk-medium-bar" class="risk-bar-medium"></div>
+                        <div id="risk-high-bar" class="risk-bar-high"></div>
+                        <div id="risk-critical-bar" class="risk-bar-critical"></div>
+                    </div>
+                    <div class="risk-legend">
+                        <span>🟢 Low <strong id="analytics-low">0</strong></span>
+                        <span>🟠 Medium <strong id="analytics-medium">0</strong></span>
+                        <span>🔴 High <strong id="analytics-high">0</strong></span>
+                        <span>🚨 Critical <strong id="analytics-critical-legend">0</strong></span>
+                    </div>
+                </div>
+
+                <div class="risk-timeline-wrap">
+                    <div class="risk-timeline-header">
+                        <div>
+                            <span class="card-label">RISK TIMELINE</span>
+                            <h4>Recent risk movement</h4>
+                        </div>
+                    </div>
+                    <div id="risk-timeline" class="risk-timeline">
+                        <div class="analytics-empty">
+                            Run a security scan to generate the risk timeline.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- RESULT -->
+
+            <div
+                id="dashboard-result"
+                class="result-panel hidden"
+            ></div>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             URL GUARDIAN
+        ========================== -->
+
+        <section
+            id="url"
+            class="section"
+        >
+
+            <div class="page-hero">
+
+                <div>
+
+                    <div class="hero-label">
+                        URL GUARDIAN
+                    </div>
+
+                    <h1>
+                        Analyze before you trust.
+                    </h1>
+
+                    <p>
+                        Inspect suspicious URLs and identify
+                        security indicators before opening them.
+                    </p>
+
+                </div>
+
+                <div class="page-icon">
+                    ↗
+                </div>
+
+            </div>
+
+
+            <div class="tool-layout">
+
+                <div class="dashboard-card tool-card">
+
+                    <span class="card-label">
+                        URL ANALYSIS
+                    </span>
+
+                    <h3>
+                        Enter a URL
+                    </h3>
+
+                    <p>
+                        VAJRA will inspect available security
+                        signals and calculate a risk assessment.
+                    </p>
+
+
+                    <input
+                        id="url-input"
+                        class="tool-input"
+                        type="url"
+                        placeholder="https://example.com"
+                    >
+
+
+                    <button
+                        class="primary-button full-button"
+                        onclick="analyzeURL()"
+                    >
+                        Analyze URL
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="url-result"
+                    class="result-panel hidden"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             FILE GUARDIAN
+        ========================== -->
+
+        <section
+            id="file"
+            class="section"
+        >
+
+            <div class="page-hero">
+
+                <div>
+
+                    <div class="hero-label">
+                        FILE GUARDIAN
+                    </div>
+
+                    <h1>
+                        Understand every file.
+                    </h1>
+
+                    <p>
+                        Inspect file metadata, hashes, extensions
+                        and available security indicators.
+                    </p>
+
+                </div>
+
+                <div class="page-icon">
+                    □
+                </div>
+
+            </div>
+
+
+            <div class="tool-layout">
+
+                <div class="dashboard-card tool-card">
+
+                    <span class="card-label">
+                        FILE ANALYSIS
+                    </span>
+
+                    <h3>
+                        Select a local file
+                    </h3>
+
+                    <p>
+                        Enter a local path for VAJRA analysis.
+                    </p>
+
+
+                    <input
+                        id="file-input"
+                        class="tool-input"
+                        type="text"
+                        placeholder="C:\Users\...\Downloads\file.exe"
+                    >
+
+
+                    <button
+                        class="primary-button full-button"
+                        onclick="analyzeFile()"
+                    >
+                        Analyze File
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="file-result"
+                    class="result-panel hidden"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             PRIVACY
+        ========================== -->
+
+        <section
+            id="privacy"
+            class="section"
+        >
+
+            <div class="page-hero">
+
+                <div>
+
+                    <div class="hero-label">
+                        PRIVACY GUARDIAN
+                    </div>
+
+                    <h1>
+                        Keep your data yours.
+                    </h1>
+
+                    <p>
+                        Review local privacy-related signals
+                        detected by the VAJRA security engine.
+                    </p>
+
+                </div>
+
+                <div class="page-icon">
+                    ◈
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card privacy-tool">
+
+                <div class="privacy-header">
+
+                    <div>
+
+                        <span class="card-label">
+                            PRIVACY MONITOR
+                        </span>
+
+                        <h3>
+                            Local Privacy Check
+                        </h3>
+
+                        <p>
+                            Run an analysis of currently available
+                            privacy signals.
+                        </p>
+
+                    </div>
+
+                    <div class="privacy-shield">
+                        ◈
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="primary-button"
+                    onclick="checkPrivacy()"
+                >
+                    Run Privacy Check
+                </button>
+
+            </div>
+
+
+            <div
+                id="privacy-result"
+                class="result-panel hidden"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =========================
+             AI INTELLIGENCE
+        ========================== -->
+
+        <section
+            id="ai"
+            class="section"
+        >
+
+            <div class="page-hero">
+
+                <div>
+
+                    <div class="hero-label">
+                        AI INTELLIGENCE CORE
+                    </div>
+
+                    <h1>
+                        Intelligence behind VAJRA.
+                    </h1>
+
+                    <p>
+                        Manage the AI backend and monitor the
+                        current inference architecture.
+                    </p>
+
+                </div>
+
+                <div class="page-icon">
+                    ✦
+                </div>
+
+            </div>
+
+
+            <div class="ai-grid">
+
+
+                <div class="dashboard-card ai-status-card">
+
+                    <span class="card-label">
+                        ACTIVE BACKEND
+                    </span>
+
+                    <div
+                        class="ai-big-value"
+                        id="ai-backend"
+                    >
+                        Development
+                    </div>
+
+                    <p>
+                        Current VAJRA inference backend
+                    </p>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <span class="card-label">
+                        RUNTIME
+                    </span>
+
+                    <div
+                        class="ai-big-value"
+                        id="ai-runtime"
+                    >
+                        Development
+                    </div>
+
+                    <p>
+                        Active AI runtime
+                    </p>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <span class="card-label">
+                        CONNECTION
+                    </span>
+
+                    <div
+                        class="ai-big-value"
+                        id="ai-status"
+                    >
+                        Ready
+                    </div>
+
+                    <p>
+                        Backend availability
+                    </p>
+
+                </div>
+
+                <div class="dashboard-card">
+
+                    <span class="card-label">
+                        DEVICE
+                    </span>
+
+                    <div
+                        class="ai-big-value"
+                        id="ai-device"
+                    >
+                        Development Machine
+                    </div>
+
+                    <p>
+                        Active AI execution device
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card backend-control">
+
+                <div>
+
+                    <span class="card-label">
+                        BACKEND CONTROL
+                    </span>
+
+                    <h3>
+                        Select inference backend
+                    </h3>
+
+                    <p>
+                        Development mode is used during local
+                        development. Qualcomm mode is reserved
+                        for the connected Qualcomm environment.
+                    </p>
+
+                </div>
+
+
+                <div class="backend-options">
+
+                    <button
+                        onclick="setBackend('development')"
+                    >
+                        <span>●</span>
+                        Development
+                    </button>
+
+
+                    <button
+                        onclick="setBackend('qualcomm')"
+                    >
+                        <span>✦</span>
+                        Qualcomm
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             ACTIVITY CENTER
+        ========================== -->
+
+        <section
+            id="activity"
+            class="section"
+        >
+
+            <div class="page-hero">
+
+                <div>
+
+                    <div class="hero-label">
+                        ACTIVITY CENTER
+                    </div>
+
+                    <h1>
+                        Security activity.
+                    </h1>
+
+                    <p>
+                        Review events generated during the
+                        current VAJRA session.
+                    </p>
+
+                </div>
+
+                <div class="page-icon">
+                    ◉
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-label">
+                            EVENT TIMELINE
+                        </span>
+
+                        <h3>
+                            Recent security events
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="full-activity-list"
+                    id="full-activity"
+                >
+
+                    <div class="timeline-item">
+
+                        <div class="timeline-dot"></div>
+
+                        <div>
+
+                            <strong>
+                                VAJRA Security Engine
+                            </strong>
+
+                            <p>
+                                Protection engine initialized.
+                            </p>
+
+                        </div>
+
+                        <time>
+                            Now
+                        </time>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    
+        <!-- VAJRA-INCIDENT-CENTER -->
+        <section id="incidents" class="section">
+
+            <div style="margin-bottom:28px;padding:28px;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:rgba(15,18,28,.72);">
+
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:24px;">
+
+                    <div>
+                        <div style="font-size:11px;letter-spacing:2px;color:#8f8cff;margin-bottom:8px;">
+                            SECURITY OPERATIONS
+                        </div>
+
+                        <h1 style="margin:0 0 8px;font-size:32px;">
+                            Incident Center
+                        </h1>
+
+                        <p style="margin:0;opacity:.65;">
+                            Review, investigate and resolve detected security incidents.
+                        </p>
+                    </div>
+
+                    <button
+                        onclick="loadIncidentCenter()"
+                        style="border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:white;padding:10px 16px;border-radius:10px;cursor:pointer;"
+                    >
+                        Refresh
+                    </button>
+
+                </div>
+
+                <div id="incident-summary" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;"></div>
+
+                <div id="incident-list">
+                    <div style="padding:30px;text-align:center;opacity:.6;">
+                        Loading incidents...
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+</main>
+
+</div>
+
+
+
+<!-- =========================
+     JAVASCRIPT
+========================== -->
+
+<script>
+
+
+const activityHistory = [];
+
+let scanCount = 0;
+
+let threatCount = 0;
+
+
+
+/* =========================
+   SECTION NAVIGATION
+========================= */
+
+function showSection(
+    sectionId,
+    clickedButton = null
+) {
+
+    document
+        .querySelectorAll(".section")
+        .forEach(section => {
+
+            section.classList.remove("active");
+
+        });
+
+
+    const targetSection =
+        document.getElementById(sectionId);
+
+
+    if (!targetSection) {
+
+        console.error(
+            `Section "${sectionId}" not found.`
+        );
+
+        return;
+
+    }
+
+
+    targetSection.classList.add("active");
+
+
+    document
+        .querySelectorAll(".nav-item")
+        .forEach(button => {
+
+            button.classList.remove("active");
+
+        });
+
+
+    if (clickedButton) {
+
+        clickedButton.classList.add("active");
+
+    }
+
+
+    const titles = {
+
+        dashboard: [
+            "Security Dashboard",
+            "Unified security intelligence for your system"
+        ],
+
+        url: [
+            "URL Guardian",
+            "Analyze suspicious links and security indicators"
+        ],
+
+        file: [
+            "File Guardian",
+            "Inspect files and security metadata"
+        ],
+
+        privacy: [
+            "Privacy Guardian",
+            "Monitor local privacy-related signals"
+        ],
+
+        ai: [
+            "AI Intelligence",
+            "Manage VAJRA intelligence infrastructure"
+        ],
+
+        activity: [
+            "Activity Center",
+            "Review recent security events"
+        ]
+
+    };
+
+
+    if (titles[sectionId]) {
+
+        document.getElementById(
+            "page-title"
+        ).textContent =
+            titles[sectionId][0];
+
+
+        document.getElementById(
+            "page-subtitle"
+        ).textContent =
+            titles[sectionId][1];
+
+    }
+
+}
+
+
+
+/* =========================
+   API
+========================= */
+
+async function apiRequest(
+    url,
+    options = {}
+) {
+
+    const response =
+        await fetch(
+            url,
+            options
+        );
+
+
+    const data =
+        await response.json();
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            data.error ||
+            "Request failed"
+        );
+
+    }
+
+
+    return data;
+
+}
+
+
+
+/* =========================
+   URL SCANNER
+========================= */
+
+function openURLScanner() {
+
+    showSection("url");
+
+
+    setTimeout(() => {
+
+        const input =
+            document.getElementById(
+                "url-input"
+            );
+
+
+        if (input) {
+
+            input.focus();
+
+        }
+
+    }, 150);
+
+}
+
+
+
+async function analyzeDashboardURL() {
+
+    const input =
+        document.getElementById(
+            "dashboard-url"
+        );
+
+
+    const url =
+        input.value.trim();
+
+
+    if (!url) {
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    await performURLAnalysis(
+        url,
+        "dashboard-result"
+    );
+
+}
+
+
+
+async function analyzeURL() {
+
+    const input =
+        document.getElementById(
+            "url-input"
+        );
+
+
+    const url =
+        input.value.trim();
+
+
+    if (!url) {
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    await performURLAnalysis(
+        url,
+        "url-result"
+    );
+
+}
+
+
+
+async function performURLAnalysis(
+    url,
+    resultId
+) {
+
+    const container =
+        document.getElementById(
+            resultId
+        );
+
+
+    container.classList.remove(
+        "hidden"
+    );
+
+
+    container.innerHTML = `
+
+        <div class="loading-state">
+
+            <div class="loader"></div>
+
+            <strong>
+                VAJRA is analyzing the URL...
+            </strong>
+
+            <span>
+                Processing security signals
+            </span>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const data =
+            await apiRequest(
+                "/api/analyze-url",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        url: url
+                    })
+
+                }
+            );
+
+
+        renderSecurityResult(
+            container,
+            data
+        );
+
+
+        updateDashboardFromURL(
+            data
+        );
+
+
+        addActivity(
+            "URL Guardian",
+            "URL analysis completed",
+            url
+        );
+
+
+    } catch (error) {
+
+        renderError(
+            container,
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =========================
+   FILE
+========================= */
+
+async function analyzeFile() {
+
+    const input =
+        document.getElementById(
+            "file-input"
+        );
+
+
+    const filePath =
+        input.value.trim();
+
+
+    if (!filePath) {
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    const container =
+        document.getElementById(
+            "file-result"
+        );
+
+
+    container.classList.remove(
+        "hidden"
+    );
+
+
+    container.innerHTML = `
+
+        <div class="loading-state">
+
+            <div class="loader"></div>
+
+            <strong>
+                Analyzing file...
+            </strong>
+
+            <span>
+                Inspecting file security metadata
+            </span>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const data =
+            await apiRequest(
+                "/api/analyze-file",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        file_path:
+                            filePath
+                    })
+
+                }
+            );
+
+
+        renderFileResult(
+            container,
+            data
+        );
+
+
+        addActivity(
+            "File Guardian",
+            "File analysis completed",
+            filePath
+        );
+
+
+    } catch (error) {
+
+        renderError(
+            container,
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =========================
+   PRIVACY
+========================= */
+
+async function checkPrivacy() {
+
+    const container =
+        document.getElementById(
+            "privacy-result"
+        );
+
+
+    container.classList.remove(
+        "hidden"
+    );
+
+
+    container.innerHTML = `
+
+        <div class="loading-state">
+
+            <div class="loader"></div>
+
+            <strong>
+                Running privacy analysis...
+            </strong>
+
+            <span>
+                Checking available privacy signals
+            </span>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const data =
+            await apiRequest(
+                "/api/privacy"
+            );
+
+
+        renderPrivacyResult(
+            container,
+            data
+        );
+
+
+        addActivity(
+            "Privacy Guardian",
+            "Privacy check completed",
+            ""
+        );
+
+
+    } catch (error) {
+
+        renderError(
+            container,
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =========================
+   SECURITY RESULT
+========================= */
+
+function renderSecurityResult(
+    container,
+    data
+) {
+
+    const security =
+        data.security || data;
+
+
+    const ai =
+        data.ai || {};
+
+
+    const score =
+        Number(
+            security.risk_score ?? 0
+        );
+
+
+    const level =
+        security.risk_level ||
+        "LOW";
+
+
+    const threat =
+        security.threat ||
+        "LOW RISK";
+
+
+    const action =
+        security.action ||
+        "ALLOW";
+
+
+    container.innerHTML = `
+
+        <div class="result-header">
+
+            <div>
+
+                <span class="card-label">
+                    SECURITY ANALYSIS
+                </span>
+
+                <h3>
+                    ${escapeHTML(
+                        data.target ||
+                        data.input ||
+                        "Security Analysis"
+                    )}
+                </h3>
+
+            </div>
+
+
+            <div
+                class="risk-badge ${riskClass(level)}"
+            >
+                ${escapeHTML(level)}
+            </div>
+
+        </div>
+
+
+
+        <div class="result-score">
+
+            <div class="result-score-number">
+
+                ${score}
+
+                <span>
+                    /100
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Risk Score
+                </strong>
+
+                <p>
+                    ${riskMessage(level)}
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="result-metrics">
+
+            <div>
+
+                <span>
+                    Threat
+                </span>
+
+                <strong>
+                    ${escapeHTML(threat)}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Confidence
+                </span>
+
+                <strong>
+                    ${security.confidence ?? "-"}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Action
+                </span>
+
+                <strong>
+                    ${escapeHTML(action)}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Severity
+                </span>
+
+                <strong>
+                    ${escapeHTML(
+                        security.severity ||
+                        level
+                    )}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="ai-result">
+
+            <div class="ai-result-header">
+
+                <span>
+                    ✦ AI INTELLIGENCE
+                </span>
+
+                <small>
+                    ${escapeHTML(
+                        ai.ai_backend ||
+                        ai.backend ||
+                        "Development"
+                    )}
+                </small>
+
+            </div>
+
+
+            <div class="ai-result-grid">
+
+
+                <div>
+
+                    <span>
+                        Model
+                    </span>
+
+                    <strong>
+                        ${escapeHTML(
+                            ai.ai_model ||
+                            ai.model ||
+                            "-"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Runtime
+                    </span>
+
+                    <strong>
+                        ${escapeHTML(
+                            ai.ai_runtime ||
+                            ai.runtime ||
+                            "-"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Status
+                    </span>
+
+                    <strong>
+                        ${escapeHTML(
+                            ai.ai_backend_status ||
+                            ai.backend_status ||
+                            "-"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Latency
+                    </span>
+
+                    <strong>
+                        ${ai.ai_latency_ms ??
+                        ai.latency_ms ??
+                        "-"} ms
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =========================
+   FILE RESULT
+========================= */
+
+function renderFileResult(
+    container,
+    data
+) {
+
+    const file =
+        data.file_analysis || {};
+
+
+    const security =
+        data.security || {};
+
+
+    const ai =
+        data.ai || {};
+
+
+    container.innerHTML = `
+
+        <div class="result-header">
+
+            <div>
+
+                <span class="card-label">
+                    FILE SECURITY ANALYSIS
+                </span>
+
+                <h3>
+                    ${escapeHTML(
+                        data.target ||
+                        file.file ||
+                        "File"
+                    )}
+                </h3>
+
+            </div>
+
+
+            <div class="risk-badge">
+
+                ${escapeHTML(
+                    file.severity ||
+                    security.risk_level ||
+                    "LOW"
+                )}
+
+            </div>
+
+        </div>
+
+
+
+        <div class="file-grid">
+
+            <div>
+
+                <span>
+                    Exists
+                </span>
+
+                <strong>
+                    ${file.exists ? "YES" : "NO"}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Size
+                </span>
+
+                <strong>
+                    ${formatBytes(
+                        file.size_bytes || 0
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Extension
+                </span>
+
+                <strong>
+                    ${escapeHTML(
+                        file.extension || "-"
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Risk
+                </span>
+
+                <strong>
+                    ${escapeHTML(
+                        security.risk_level ||
+                        "LOW"
+                    )}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="hash-box">
+
+            <span>
+                SHA-256
+            </span>
+
+            <code>
+                ${escapeHTML(
+                    file.sha256 ||
+                    "Not available"
+                )}
+            </code>
+
+        </div>
+
+
+
+        <div class="finding-box">
+
+            <span>
+                SECURITY SIGNALS
+            </span>
+
+            ${
+                file.signals &&
+                file.signals.length
+
+                ?
+
+                file.signals
+                    .map(
+                        signal =>
+                        `<p>
+                            ⚠ ${escapeHTML(signal)}
+                        </p>`
+                    )
+                    .join("")
+
+                :
+
+                `<p class="success-text">
+                    ✓ No baseline file signals detected
+                </p>`
+            }
+
+        </div>
+
+
+
+        <div class="ai-result">
+
+            <div class="ai-result-header">
+
+                <span>
+                    ✦ AI INTELLIGENCE
+                </span>
+
+            </div>
+
+
+            <div class="ai-result-grid">
+
+
+                <div>
+
+                    <span>
+                        Model
+                    </span>
+
+                    <strong>
+                        ${escapeHTML(
+                            ai.model || "-"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Runtime
+                    </span>
+
+                    <strong>
+                        ${escapeHTML(
+                            ai.runtime || "-"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Backend
+                    </span>
+
+                    <strong>
+                        ${escapeHTML(
+                            ai.backend || "-"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Status
+                    </span>
+
+                    <strong>
+                        ${escapeHTML(
+                            ai.backend_status ||
+                            "-"
+                        )}
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =========================
+   PRIVACY RESULT
+========================= */
+
+function renderPrivacyResult(
+    container,
+    data
+) {
+
+    const result =
+        data.security || {};
+
+
+    const risk =
+        result.risk_level ||
+        "LOW";
+
+
+    const findings =
+        result.findings || [];
+
+
+    container.innerHTML = `
+
+        <div class="result-header">
+
+            <div>
+
+                <span class="card-label">
+                    PRIVACY ANALYSIS
+                </span>
+
+                <h3>
+                    Local Privacy Check
+                </h3>
+
+            </div>
+
+
+            <div class="risk-badge">
+
+                ${escapeHTML(risk)}
+
+            </div>
+
+        </div>
+
+
+
+        <div class="privacy-result-grid">
+
+            <div class="privacy-score">
+
+                <strong>
+                    ${privacyScore(risk)}
+                </strong>
+
+                <span>
+                    /100
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <span class="card-label">
+                    PRIVACY STATUS
+                </span>
+
+                <h3>
+                    ${privacyStatus(risk)}
+                </h3>
+
+                <p>
+                    Based on currently available
+                    privacy signals.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="finding-box">
+
+            <span>
+                FINDINGS
+            </span>
+
+            ${
+                findings.length
+
+                ?
+
+                findings
+                    .map(
+                        finding =>
+                        `<p>
+                            ⚠ ${escapeHTML(finding)}
+                        </p>`
+                    )
+                    .join("")
+
+                :
+
+                `<p class="success-text">
+                    ✓ No findings reported
+                </p>`
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =========================
+   DASHBOARD UPDATE
+========================= */
+
+function updateDashboardFromURL(
+    data
+) {
+
+    const security =
+        data.security || data;
+
+    const score =
+        Number(
+            security.risk_score ?? 0
+        );
+
+    const protectionScore =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                100 - score
+            )
+        );
+
+
+    /* =========================
+       SECURITY SCORE
+    ========================== */
+
+    animateNumber(
+        "security-score",
+        protectionScore
+    );
+
+    document.getElementById(
+        "score-status"
+    ).textContent =
+        scoreStatus(
+            protectionScore
+        );
+
+    document.getElementById(
+        "score-message"
+    ).textContent =
+        `Latest URL analysis produced a risk score of ${score}.`;
+
+    updateScoreCircle(
+        protectionScore
+    );
+
+
+    /* =========================
+       SCAN ANALYTICS
+    ========================== */
+
+    scanCount++;
+
+    animateNumber(
+        "scan-count",
+        scanCount
+    );
+
+    document.getElementById(
+        "scan-status"
+    ).textContent =
+        `● ${scanCount} scan${scanCount === 1 ? "" : "s"} completed`;
+
+
+    /* =========================
+       THREAT ANALYTICS
+    ========================== */
+
+    const threat =
+        security.threat || "";
+
+    threatCount =
+        threat.includes("LOW")
+        ? 0
+        : 1;
+
+    animateNumber(
+        "threat-count",
+        threatCount
+    );
+
+    document.getElementById(
+        "threat-status"
+    ).textContent =
+        threatCount
+        ? "● Security event detected"
+        : "● No active threats";
+
+}
+
+/* =========================
+   AI STATUS
+========================= */
+
+async function loadAIStatus() {
+
+    try {
+
+        const data =
+            await apiRequest(
+                "/api/ai/status"
+            );
+
+        const backend =
+            data.active_backend ||
+            "development";
+
+        const runtime =
+            data.runtime ||
+            (
+                backend === "qualcomm"
+                ? "GenieX"
+                : "Development"
+            );
+
+        let status = "Not Available";
+
+        if (data.connected && data.available) {
+            status = "Connected";
+        } else if (data.available) {
+            status = "Available";
+        } else if (backend === "development") {
+            status = "Ready";
+        }
+
+        const device =
+            data.device ||
+            (
+                backend === "qualcomm"
+                ? "Snapdragon device not configured"
+                : "Development Machine"
+            );
+
+        const dashboardBackend =
+            document.getElementById(
+                "dashboard-backend"
+            );
+
+        const dashboardStatus =
+            document.getElementById(
+                "dashboard-ai-status"
+            );
+
+        const aiBackend =
+            document.getElementById(
+                "ai-backend"
+            );
+
+        const aiRuntime =
+            document.getElementById(
+                "ai-runtime"
+            );
+
+        const aiStatus =
+            document.getElementById(
+                "ai-status"
+            );
+
+        const aiDevice =
+            document.getElementById(
+                "ai-device"
+            );
+
+        if (dashboardBackend) {
+            dashboardBackend.textContent =
+                capitalize(backend);
+        }
+
+        if (dashboardStatus) {
+            dashboardStatus.textContent =
+                status;
+        }
+
+        if (aiBackend) {
+            aiBackend.textContent =
+                capitalize(backend);
+        }
+
+        if (aiRuntime) {
+            aiRuntime.textContent =
+                runtime;
+        }
+
+        if (aiStatus) {
+            aiStatus.textContent =
+                status;
+        }
+
+        if (aiDevice) {
+            aiDevice.textContent =
+                device;
+        }
+
+        console.log(
+            "VAJRA AI status:",
+            {
+                backend: backend,
+                runtime: runtime,
+                status: status,
+                device: device,
+                connected: !!data.connected,
+                available: !!data.available
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "AI status:",
+            error
+        );
+
+        const statusElement =
+            document.getElementById(
+                "ai-status"
+            );
+
+        if (statusElement) {
+            statusElement.textContent =
+                "Unavailable";
+        }
+
+    }
+
+}
+
+
+/* =========================
+   BACKEND SWITCH
+========================= */
+
+async function setBackend(
+    backend
+) {
+
+    try {
+
+        const data =
+            await apiRequest(
+                "/api/ai/backend",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        backend: backend
+                    })
+
+                }
+            );
+
+        await loadAIStatus();
+
+        addActivity(
+            "AI Intelligence",
+            `Backend switched to ${backend}`,
+            ""
+        );
+
+        if (
+            backend === "qualcomm"
+        ) {
+
+            const backendData =
+                data.backend || {};
+
+            if (
+                backendData.connected &&
+                backendData.available
+            ) {
+
+                alert(
+                    "Qualcomm AI Hub connected. " +
+                    "Snapdragon X Elite CRD is configured. " +
+                    "Actual Qwen3.5-2B inference requires " +
+                    "a compatible Snapdragon Windows ARM64 environment."
+                );
+
+            } else {
+
+                alert(
+                    "Qualcomm backend selected, " +
+                    "but the Qualcomm AI Hub backend is " +
+                    "not currently available."
+                );
+
+            }
+
+        }
+
+    } catch (error) {
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =========================
+   ACTIVITY
+========================= */
+
+function addActivity(
+    source,
+    message,
+    target
+) {
+
+    // Server-side scan history is the source of truth.
+    loadScanHistory();
+
+}
+
+
+/* =========================
+   SCAN HISTORY
+========================= */
+
+async function loadScanHistory() {
+
+    try {
+
+        const data = await apiRequest(
+            "/api/scan-history?limit=20"
+        );
+
+        renderScanHistory(
+            data.scans || []
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Scan history:",
+            error
+        );
+
+    }
+
+}
+
+
+function renderScanHistory(scans) {
+
+    const dashboard =
+        document.getElementById(
+            "dashboard-activity"
+        );
+
+    const full =
+        document.getElementById(
+            "full-activity"
+        );
+
+    if (!scans.length) {
+
+        if (dashboard) {
+            dashboard.innerHTML = `
+                <div class="empty-activity">
+                    <div>✓</div>
+                    <span>No security scans yet</span>
+                    <small>Run a scan to create an event</small>
+                </div>
+            `;
+        }
+
+        if (full) {
+            full.innerHTML = `
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div>
+                        <strong>VAJRA Security Engine</strong>
+                        <p>Waiting for the first security scan.</p>
+                    </div>
+                    <time>Ready</time>
+                </div>
+            `;
+        }
+
+        return;
+    }
+
+    if (dashboard) {
+
+        dashboard.innerHTML = scans
+            .slice(0, 5)
+            .map(scan => `
+                <div class="activity-item">
+                    <div class="activity-icon">${getRiskIcon(scan.risk_level)}</div>
+                    <div>
+                        <strong>${escapeHTML(scan.type || "Security Scan")}</strong>
+                        <small>
+                            Risk ${escapeHTML(String(scan.risk_score ?? 0))}
+                            · ${escapeHTML(scan.action || "ALLOW")}
+                        </small>
+                    </div>
+                    <time>${formatScanTime(scan.timestamp)}</time>
+                </div>
+            `)
+            .join("");
+    }
+
+    if (full) {
+
+        full.innerHTML = scans
+            .map(scan => {
+                const level = String(scan.risk_level || "LOW").toUpperCase();
+                return `
+                    <div class="timeline-item risk-${level.toLowerCase()}">
+                        <div class="timeline-dot"></div>
+                        <div>
+                            <strong>${escapeHTML(scan.type || "Security Scan")}</strong>
+                            <p>${escapeHTML(scan.target || "Unknown target")}</p>
+                            <small>
+                                Risk Score: <strong>${Number(scan.risk_score || 0)}</strong>
+                                · Level: <strong>${escapeHTML(level)}</strong>
+                                · Action: <strong>${escapeHTML(scan.action || "ALLOW")}</strong>
+                            </small>
+                        </div>
+                        <time>${formatScanTime(scan.timestamp)}</time>
+                    </div>
+                `;
+            })
+            .join("");
+    }
+
+}
+
+
+function getRiskIcon(level) {
+
+    const value = String(level || "LOW").toUpperCase();
+
+    if (value === "CRITICAL" || value === "HIGH") return "!";
+    if (value === "MEDIUM") return "!";
+    return "✓";
+
+}
+
+
+function formatScanTime(timestamp) {
+
+    if (!timestamp) return "Now";
+
+    const date = new Date(timestamp);
+
+    if (Number.isNaN(date.getTime())) return "Now";
+
+    return date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+
+}
+
+
+/* =========================
+   SECURITY ANALYTICS
+========================= */
+
+async function loadSecurityAnalytics() {
+
+    try {
+
+        const data = await apiRequest(
+            "/api/security-analytics"
+        );
+
+        updateSecurityAnalytics(data);
+
+    } catch (error) {
+
+        console.error(
+            "Security analytics:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================
+   UPDATE ANALYTICS UI
+========================= */
+
+function updateSecurityAnalytics(data) {
+
+    if (!data) {
+        return;
+    }
+
+    const total = Number(data.total_scans || 0);
+    const average = Math.round(Number(data.average_risk || 0));
+    const highest = Number(data.highest_risk || 0);
+    const low = Number(data.low_risk || 0);
+    const medium = Number(data.medium_risk || 0);
+    const high = Number(data.high_risk || 0);
+    const critical = Number(data.critical_risk || 0);
+
+
+    /* =========================
+       ANALYTICS NUMBERS
+       querySelectorAll is intentional because
+       the dashboard contains more than one
+       analytics display.
+    ========================== */
+
+    updateAnalyticsNumber("analytics-total", total);
+    updateAnalyticsNumber("analytics-average", average);
+    updateAnalyticsNumber("analytics-highest", highest);
+    updateAnalyticsNumber("analytics-critical", critical);
+    updateAnalyticsNumber("analytics-low", low);
+    updateAnalyticsNumber("analytics-medium", medium);
+    updateAnalyticsNumber("analytics-high", high);
+    updateAnalyticsNumber("analytics-critical-legend", critical);
+
+
+    /* =========================
+       DISTRIBUTION TOTAL
+    ========================== */
+
+    document
+        .querySelectorAll("#analytics-distribution-total")
+        .forEach(element => {
+
+            element.textContent =
+                `${total} scan${total === 1 ? "" : "s"}`;
+
+        });
+
+
+    /* =========================
+       RISK DISTRIBUTION
+    ========================== */
+
+    updateRiskDistribution(
+        data,
+        total
+    );
+
+
+    /* =========================
+       RISK TIMELINE
+    ========================== */
+
+    renderRiskTimeline(
+        data.timeline || []
+    );
+
+}
+
+
+/* =========================
+   ANALYTICS NUMBER UPDATE
+========================= */
+
+function updateAnalyticsNumber(
+    id,
+    target
+) {
+
+    const elements =
+        document.querySelectorAll(
+            `#${id}`
+        );
+
+    elements.forEach(element => {
+
+        const value = Number(target) || 0;
+
+        const current =
+            Number(
+                String(element.textContent || "")
+                    .replace(/[^0-9.-]/g, "")
+            ) || 0;
+
+        const duration = 450;
+        const startTime = performance.now();
+
+        function animate() {
+
+            const elapsed = performance.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+
+            element.textContent = Math.round(
+                current + (value - current) * eased
+            );
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                element.textContent = value;
+            }
+        }
+
+        requestAnimationFrame(animate);
+
+    });
+
+}
+
+
+/* =========================
+   RISK DISTRIBUTION
+========================= */
+
+function updateRiskDistribution(
+    data,
+    total
+) {
+
+    const values = {
+        low: Number(data.low_risk || 0),
+        medium: Number(data.medium_risk || 0),
+        high: Number(data.high_risk || 0),
+        critical: Number(data.critical_risk || 0)
+    };
+
+
+    const percent = value =>
+        total > 0
+            ? `${(value / total) * 100}%`
+            : "0%";
+
+
+    document
+        .querySelectorAll("#risk-low-bar")
+        .forEach(element => {
+            element.style.width = percent(values.low);
+        });
+
+
+    document
+        .querySelectorAll("#risk-medium-bar")
+        .forEach(element => {
+            element.style.width = percent(values.medium);
+        });
+
+
+    document
+        .querySelectorAll("#risk-high-bar")
+        .forEach(element => {
+            element.style.width = percent(values.high);
+        });
+
+
+    document
+        .querySelectorAll("#risk-critical-bar")
+        .forEach(element => {
+            element.style.width = percent(values.critical);
+        });
+
+}
+
+
+/* =========================
+   RISK TIMELINE
+========================= */
+
+function renderRiskTimeline(
+    timeline
+) {
+
+    const containers =
+        document.querySelectorAll(
+            "#risk-timeline"
+        );
+
+
+    if (!containers.length) {
+        return;
+    }
+
+
+    if (!timeline.length) {
+
+        containers.forEach(container => {
+
+            container.innerHTML = `
+                <div class="analytics-empty">
+                    Run a security scan to generate the risk timeline.
+                </div>
+            `;
+
+        });
+
+        return;
+
+    }
+
+
+    const maxScore = Math.max(
+        100,
+        ...timeline.map(
+            item => Number(item.risk_score || 0)
+        )
+    );
+
+
+    const html = timeline
+        .slice(-10)
+        .map(item => {
+
+            const score = Number(
+                item.risk_score || 0
+            );
+
+            const level = String(
+                item.risk_level || "LOW"
+            ).toUpperCase();
+
+            const width = Math.max(
+                4,
+                (score / maxScore) * 100
+            );
+
+            return `
+                <div class="risk-timeline-row">
+
+                    <div class="risk-timeline-meta">
+                        <strong>
+                            ${escapeHTML(level)}
+                        </strong>
+                        <span>
+                            ${score}/100
+                        </span>
+                    </div>
+
+                    <div class="risk-track">
+                        <div
+                            class="risk-fill risk-fill-${level.toLowerCase()}"
+                            style="width:${width}%"
+                        ></div>
+                    </div>
+
+                    <div class="risk-target">
+                        ${escapeHTML(
+                            item.target || "Unknown target"
+                        )}
+                    </div>
+
+                </div>
+            `;
+
+        })
+        .join("");
+
+
+    containers.forEach(container => {
+        container.innerHTML = html;
+    });
+
+}
+
+
+function updateClock() {
+
+    const now =
+        new Date();
+
+
+    document.getElementById(
+        "current-time"
+    ).textContent =
+        now.toLocaleTimeString(
+            [],
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+}
+
+
+setInterval(
+    updateClock,
+    1000
+);
+
+
+updateClock();
+
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function riskClass(
+    level
+) {
+
+    return String(
+        level
+    ).toLowerCase();
+
+}
+
+
+
+function riskMessage(
+    level
+) {
+
+    const messages = {
+
+        LOW:
+            "Low security risk detected.",
+
+        MEDIUM:
+            "Review recommended security signals.",
+
+        HIGH:
+            "Significant security risk detected.",
+
+        CRITICAL:
+            "Critical security risk detected."
+
+    };
+
+
+    return (
+        messages[level] ||
+        "Security analysis completed."
+    );
+
+}
+
+
+
+function scoreStatus(
+    score
+) {
+
+    if (score >= 85)
+        return "Strong protection";
+
+
+    if (score >= 65)
+        return "Moderate protection";
+
+
+    if (score >= 40)
+        return "Protection needs review";
+
+
+    return "High attention required";
+
+}
+
+
+
+function privacyScore(
+    risk
+) {
+
+    if (risk === "LOW")
+        return 90;
+
+
+    if (risk === "MEDIUM")
+        return 65;
+
+
+    return 35;
+
+}
+
+
+
+function privacyStatus(
+    risk
+) {
+
+    if (risk === "LOW")
+        return "Privacy posture looks good";
+
+
+    if (risk === "MEDIUM")
+        return "Some privacy signals require review";
+
+
+    return "Privacy attention recommended";
+
+}
+
+
+
+function formatBytes(
+    bytes
+) {
+
+    if (!bytes)
+        return "0 B";
+
+
+    const units = [
+        "B",
+        "KB",
+        "MB",
+        "GB"
+    ];
+
+
+    const index =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+
+    return (
+        (
+            bytes /
+            Math.pow(
+                1024,
+                index
+            )
+        ).toFixed(2)
+        +
+        " "
+        +
+        units[index]
+    );
+
+}
+
+
+
+function formatTime(
+    date
+) {
+
+    return date.toLocaleTimeString(
+        [],
+        {
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+
+function capitalize(
+    value
+) {
+
+    return String(value)
+        .charAt(0)
+        .toUpperCase()
+        +
+        String(value)
+            .slice(1);
+
+}
+
+
+
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+
+function renderError(
+    container,
+    message
+) {
+
+    container.innerHTML = `
+
+        <div class="error-state">
+
+            <strong>
+                Analysis failed
+            </strong>
+
+            <p>
+                ${escapeHTML(message)}
+            </p>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =========================
+   LIVE NUMBER ANIMATION
+========================= */
+
+function animateNumber(
+    elementId,
+    target
+) {
+
+    const element =
+        document.getElementById(
+            elementId
+        );
+
+    if (!element) {
+        return;
+    }
+
+    const start =
+        Number(
+            element.textContent
+                .replace(/[^0-9.-]/g, "")
+        ) || 0;
+
+    const duration = 700;
+
+    const startTime =
+        performance.now();
+
+    function update(
+        currentTime
+    ) {
+
+        const elapsed =
+            currentTime - startTime;
+
+        const progress =
+            Math.min(
+                elapsed / duration,
+                1
+            );
+
+        const eased =
+            1 -
+            Math.pow(
+                1 - progress,
+                3
+            );
+
+        const value =
+            Math.round(
+                start +
+                (
+                    target - start
+                ) * eased
+            );
+
+        element.textContent =
+            value;
+
+        if (progress < 1) {
+
+            requestAnimationFrame(
+                update
+            );
+
+        }
+
+    }
+
+    requestAnimationFrame(
+        update
+    );
+
+}
+
+
+/* =========================
+   SCORE CIRCLE
+========================= */
+
+function updateScoreCircle(
+    score
+) {
+
+    const circle =
+        document.querySelector(
+            ".score-circle"
+        );
+
+    if (!circle) {
+        return;
+    }
+
+    const degrees =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                score
+            )
+        ) * 3.6;
+
+    circle.style.setProperty(
+        "--score-progress",
+        `${degrees}deg`
+    );
+
+}
+
+
+/* =========================
+   INITIALIZATION
+========================= */
+
+loadAIStatus();
+loadScanHistory();
+loadSecurityAnalytics();
+
+
+addActivity(
+    "VAJRA Core",
+    "Security engine initialized",
+    ""
+);
+
+/* =========================================
+   VAJRA LIVE THREAT MONITOR
+========================================= */
+
+let threatMonitorTimer = null;
+
+async function refreshThreatMonitor() {
+
+    try {
+
+        const response = await fetch(
+            "/api/security-analytics"
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "Threat monitor API failed"
+            );
+        }
+
+        const data =
+            await response.json();
+
+        updateSecurityAnalytics(data);
+
+        /*
+         * Refresh Activity Center too,
+         * if the function exists.
+         */
+
+        if (
+            typeof loadScanHistory ===
+            "function"
+        ) {
+
+            await loadScanHistory();
+
+        }
+
+        updateThreatStatus(data);
+
+    } catch (error) {
+
+        console.error(
+            "Live threat monitor:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   THREAT STATUS
+========================================= */
+
+function updateThreatStatus(data) {
+
+    const critical =
+        Number(
+            data.critical_risk || 0
+        );
+
+    const high =
+        Number(
+            data.high_risk || 0
+        );
+
+    const status =
+        document.getElementById(
+            "system-threat-status"
+        );
+
+    if (!status) {
+        return;
+    }
+
+    if (critical > 0) {
+
+        status.textContent =
+            "CRITICAL THREAT DETECTED";
+
+        status.classList.add(
+            "threat-critical"
+        );
+
+        status.classList.remove(
+            "threat-safe",
+            "threat-warning"
+        );
+
+    } else if (high > 0) {
+
+        status.textContent =
+            "HIGH RISK ACTIVITY";
+
+        status.classList.add(
+            "threat-warning"
+        );
+
+        status.classList.remove(
+            "threat-safe",
+            "threat-critical"
+        );
+
+    } else {
+
+        status.textContent =
+            "SYSTEM SECURE";
+
+        status.classList.add(
+            "threat-safe"
+        );
+
+        status.classList.remove(
+            "threat-warning",
+            "threat-critical"
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   START MONITOR
+========================================= */
+
+function startThreatMonitor() {
+
+    /*
+     * Prevent multiple timers.
+     */
+
+    if (threatMonitorTimer) {
+
+        clearInterval(
+            threatMonitorTimer
+        );
+
+    }
+
+    /*
+     * Initial check.
+     */
+
+    refreshThreatMonitor();
+
+    /*
+     * Check every 10 seconds.
+     */
+
+    threatMonitorTimer =
+        setInterval(
+            refreshThreatMonitor,
+            10000
+        );
+
+}
+
+
+/* =========================================
+   START AFTER PAGE LOAD
+========================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        startThreatMonitor();
+
+    }
+);
+
+</script>
+
+
+
+<script id="VAJRA-INCIDENT-JS">
+
+async function loadIncidentCenter() {
+
+    const list = document.getElementById("incident-list");
+    const summary = document.getElementById("incident-summary");
+
+    if (!list) return;
+
+    list.innerHTML = '<div style="padding:30px;text-align:center;opacity:.6;">Loading incidents...</div>';
+
+    try {
+
+        const response = await fetch("/api/incidents");
+
+        if (!response.ok) {
+            throw new Error("Incident API returned " + response.status);
+        }
+
+        const data = await response.json();
+
+        let incidents = [];
+
+        if (Array.isArray(data)) {
+            incidents = data;
+        } else if (Array.isArray(data.incidents)) {
+            incidents = data.incidents;
+        } else if (Array.isArray(data.results)) {
+            incidents = data.results;
+        }
+
+        const openCount = incidents.filter(
+            x => String(x.status || "").toUpperCase() === "OPEN"
+        ).length;
+
+        const investigatingCount = incidents.filter(
+            x => String(x.status || "").toUpperCase() === "INVESTIGATING"
+        ).length;
+
+        const highCount = incidents.filter(
+            x => ["HIGH","CRITICAL"].includes(
+                String(x.risk_level || "").toUpperCase()
+            )
+        ).length;
+
+        summary.innerHTML =
+            incidentStat("TOTAL", incidents.length) +
+            incidentStat("OPEN", openCount) +
+            incidentStat("INVESTIGATING", investigatingCount) +
+            incidentStat("HIGH RISK", highCount);
+
+        if (!incidents.length) {
+            list.innerHTML = '<div style="padding:40px;text-align:center;opacity:.6;">No security incidents detected.</div>';
+            return;
+        }
+
+        list.innerHTML = incidents.map(incidentCard).join("");
+
+    } catch (error) {
+
+        list.innerHTML =
+            '<div style="padding:25px;color:#ff8f9d;background:rgba(255,60,80,.05);border-radius:14px;">' +
+            'Failed to load incidents: ' +
+            escapeHtml(error.message) +
+            '</div>';
+    }
+}
+
+function incidentStat(label, value) {
+
+    return `
+        <div style="padding:18px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);">
+            <div style="font-size:10px;letter-spacing:1.5px;opacity:.5;margin-bottom:8px;">
+                ${label}
+            </div>
+            <div style="font-size:26px;font-weight:700;">
+                ${value}
+            </div>
+        </div>
+    `;
+}
+
+function incidentCard(incident) {
+
+    const risk = String(incident.risk_level || "UNKNOWN").toUpperCase();
+    const threat = String(incident.threat || "UNKNOWN").toUpperCase();
+    const action = String(incident.action || "UNKNOWN").toUpperCase();
+    const status = String(incident.status || "OPEN").toUpperCase();
+
+    const target =
+        incident.target ||
+        incident.description ||
+        "Unknown target";
+
+    const timestamp =
+        incident.timestamp ||
+        incident.created_at ||
+        "";
+
+    return `
+        <div style="margin-bottom:14px;padding:20px;border-radius:16px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);">
+
+            <div style="display:flex;justify-content:space-between;gap:20px;align-items:flex-start;">
+
+                <div style="min-width:0;">
+
+                    <div style="font-size:11px;letter-spacing:1.5px;opacity:.45;margin-bottom:7px;">
+                        INCIDENT #${incident.id ?? "-"}
+                    </div>
+
+                    <div style="font-size:16px;font-weight:600;word-break:break-word;">
+                        ${escapeHtml(target)}
+                    </div>
+
+                    <div style="margin-top:8px;font-size:12px;opacity:.55;">
+                        ${escapeHtml(timestamp)}
+                    </div>
+
+                </div>
+
+                <div style="display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end;">
+                    ${badge(risk)}
+                    ${badge(threat)}
+                    ${badge(action)}
+                    ${badge(status)}
+                </div>
+
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:18px;padding-top:15px;border-top:1px solid rgba(255,255,255,.06);">
+
+                <div style="font-size:13px;opacity:.65;">
+                    Risk Score:
+                    <strong style="opacity:1;">
+                        ${incident.risk_score ?? "-"}
+                    </strong>
+                </div>
+
+                <select
+                    onchange="updateIncidentStatus(${incident.id}, this.value)"
+                    style="background:#111522;color:white;border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:8px 10px;"
+                >
+                    <option value="OPEN" ${status === "OPEN" ? "selected" : ""}>OPEN</option>
+                    <option value="INVESTIGATING" ${status === "INVESTIGATING" ? "selected" : ""}>INVESTIGATING</option>
+                    <option value="RESOLVED" ${status === "RESOLVED" ? "selected" : ""}>RESOLVED</option>
+                </select>
+
+            </div>
+
+        </div>
+    `;
+}
+
+function badge(value) {
+
+    return `
+        <span style="padding:6px 9px;border-radius:7px;font-size:10px;letter-spacing:.7px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);">
+            ${escapeHtml(value)}
+        </span>
+    `;
+}
+
+async function updateIncidentStatus(id, status) {
+
+    try {
+
+        const response = await fetch(
+            "/api/incidents/" + id + "/status",
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    status:status
+                })
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Status update failed: " + response.status);
+        }
+
+        await loadIncidentCenter();
+
+    } catch (error) {
+
+        alert("Could not update incident status: " + error.message);
+
+        await loadIncidentCenter();
+    }
+}
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+</script>
+
+
+
+<!-- =========================================
+     VAJRA EMAIL / MESSAGE GUARDIAN
+     ========================================= -->
+
+<section
+    id="emailGuardianPanel"
+    class="dashboard-section"
+    style="margin-top:24px;"
+>
+
+    <div class="card">
+
+        <div class="card-header">
+            <div>
+                <h2>Email & Message Guardian</h2>
+                <p>
+                    Analyze suspicious emails and messages
+                    with VAJRA security intelligence.
+                </p>
+            </div>
+        </div>
+
+        <div style="display:grid;gap:12px;">
+
+            <input
+                id="emailGuardianSubject"
+                type="text"
+                placeholder="Email subject"
+                style="padding:12px;border-radius:8px;border:1px solid #444;"
+            >
+
+            <textarea
+                id="emailGuardianMessage"
+                rows="7"
+                placeholder="Paste email or message here..."
+                style="padding:12px;border-radius:8px;border:1px solid #444;"
+            ></textarea>
+
+            <button
+                type="button"
+                onclick="analyzeEmailGuardian()"
+                style="padding:12px;border-radius:8px;cursor:pointer;"
+            >
+                Analyze Message
+            </button>
+
+            <pre
+                id="emailGuardianResult"
+                style="white-space:pre-wrap;overflow:auto;"
+            ></pre>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+
+async function analyzeEmailGuardian() {
+
+    const subject =
+        document.getElementById(
+            "emailGuardianSubject"
+        ).value;
+
+    const message =
+        document.getElementById(
+            "emailGuardianMessage"
+        ).value;
+
+    const output =
+        document.getElementById(
+            "emailGuardianResult"
+        );
+
+    if (!message.trim()) {
+
+        output.textContent =
+            "Please enter an email/message.";
+
+        return;
+    }
+
+    output.textContent =
+        "Analyzing...";
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/analyze-email",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body: JSON.stringify({
+                        subject: subject,
+                        message: message
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        output.textContent =
+            JSON.stringify(
+                data,
+                null,
+                2
+            );
+
+    } catch (error) {
+
+        output.textContent =
+            "Analysis failed: " +
+            error;
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>

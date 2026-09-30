@@ -1,0 +1,16 @@
+﻿__pycache__/
+*.py[cod]
+*.backup
+*.before_*
+*final_backup*
+*.db
+*.sqlite
+*.sqlite3
+.env
+.env.*
+*.log
+.vscode/
+.idea/
+VAJRA_SUBMISSION_2026/
+VAJRA_SUBMISSION_2026.zip
+geniex-cli.exe
